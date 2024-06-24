@@ -84,7 +84,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void updateCustomerPatchById(UUID id, Customer customer) {
+    public void patchCustomerById(UUID id, Customer customer) {
         Customer existing = customers.get(id);
 
         if (StringUtils.hasText(customer.getName()))
