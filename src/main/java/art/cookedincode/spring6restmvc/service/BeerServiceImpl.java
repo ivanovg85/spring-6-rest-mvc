@@ -2,8 +2,10 @@ package art.cookedincode.spring6restmvc.service;
 
 import art.cookedincode.spring6restmvc.model.Beer;
 import art.cookedincode.spring6restmvc.model.BeerStyle;
+import ch.qos.logback.core.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -98,6 +100,7 @@ public class BeerServiceImpl implements BeerService {
         existing.setBeerStyle(beer.getBeerStyle());
         existing.setPrice(beer.getPrice());
         existing.setUpc(beer.getUpc());
+        existing.setQuantityOnHand(beer.getQuantityOnHand());
         existing.setVersion(existing.getVersion() + 1);
         existing.setUpdateDate(LocalDateTime.now());
 
@@ -107,5 +110,30 @@ public class BeerServiceImpl implements BeerService {
     @Override
     public void deleteById(UUID beerId) {
         beerMap.remove(beerId);
+    }
+
+    @Override
+    public void patchBeerById(UUID beerId, Beer beer) {
+        Beer existing = beerMap.get(beerId);
+
+        if (StringUtils.hasText(beer.getBeerName()))
+            existing.setBeerName(beer.getBeerName());
+
+        if (beer.getBeerStyle() != null)
+            existing.setBeerStyle(beer.getBeerStyle());
+
+        if (beer.getPrice() != null)
+            existing.setPrice(beer.getPrice());
+
+        if (StringUtils.hasText(beer.getUpc()))
+            existing.setUpc(beer.getUpc());
+
+        if (beer.getQuantityOnHand() != null)
+            existing.setQuantityOnHand(beer.getQuantityOnHand());
+
+        existing.setVersion(existing.getVersion() + 1);
+        existing.setUpdateDate(LocalDateTime.now());
+
+        beerMap.put(existing.getId(), existing);
     }
 }
