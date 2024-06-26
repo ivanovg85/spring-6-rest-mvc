@@ -9,16 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.cert.Extension;
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class CustomerControllerIT {
@@ -54,9 +52,7 @@ class CustomerControllerIT {
 
     @Test
     void testCustomerNotFound() {
-        assertThrows(NotFoundException.class, () -> {
-            customerController.getCustomerById(UUID.randomUUID());
-        });
+        assertThrows(NotFoundException.class, () -> customerController.getCustomerById(UUID.randomUUID()));
     }
 
     @Test
@@ -75,7 +71,7 @@ class CustomerControllerIT {
                 .name("Jack")
                 .build();
 
-        ResponseEntity responseEntity = customerController.createCustomer(customerDTO);
+        var responseEntity = customerController.createCustomer(customerDTO);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(201));
         assertThat(responseEntity.getHeaders().getLocation()).isNotNull();
 
@@ -97,7 +93,7 @@ class CustomerControllerIT {
         final String customerName = "Guga";
         customerDTO.setName(customerName);
 
-        ResponseEntity responseEntity = customerController.updateCustomerById(customer.getId(), customerDTO);
+        var responseEntity = customerController.updateCustomerById(customer.getId(), customerDTO);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
 
         Customer updatedCustomer = customerRepository.findById(customer.getId()).get();
@@ -106,9 +102,7 @@ class CustomerControllerIT {
 
     @Test
     void testUpdateCustomerNotFound() {
-        assertThrows(NotFoundException.class, () -> {
-            customerController.updateCustomerById(UUID.randomUUID(), CustomerDTO.builder().build());
-        });
+        assertThrows(NotFoundException.class, () -> customerController.updateCustomerById(UUID.randomUUID(), CustomerDTO.builder().build()));
     }
 
     @Rollback
@@ -122,7 +116,7 @@ class CustomerControllerIT {
         final String customerName = "Guga";
         customerDTO.setName(customerName);
 
-        ResponseEntity responseEntity = customerController.patchCustomerById(customer.getId(), customerDTO);
+        var responseEntity = customerController.patchCustomerById(customer.getId(), customerDTO);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
 
         Customer updatedCustomer = customerRepository.findById(customer.getId()).get();
@@ -131,9 +125,7 @@ class CustomerControllerIT {
 
     @Test
     void testPatchCustomerNotFound() {
-        assertThrows(NotFoundException.class, () -> {
-            customerController.patchCustomerById(UUID.randomUUID(), CustomerDTO.builder().build());
-        });
+        assertThrows(NotFoundException.class, () -> customerController.patchCustomerById(UUID.randomUUID(), CustomerDTO.builder().build()));
     }
 
     @Rollback
@@ -142,7 +134,7 @@ class CustomerControllerIT {
     void deleteCustomerById() {
         Customer customer = customerRepository.findAll().getFirst();
 
-        ResponseEntity responseEntity = customerController.deleteCustomerById(customer.getId());
+        var responseEntity = customerController.deleteCustomerById(customer.getId());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
 
         assertThat(customerRepository.findById(customer.getId())).isEmpty();
@@ -150,8 +142,6 @@ class CustomerControllerIT {
 
     @Test
     void deleteCustomerByIdNotFound() {
-        assertThrows(NotFoundException.class, () -> {
-            customerController.deleteCustomerById(UUID.randomUUID());
-        });
+        assertThrows(NotFoundException.class, () -> customerController.deleteCustomerById(UUID.randomUUID()));
     }
 }

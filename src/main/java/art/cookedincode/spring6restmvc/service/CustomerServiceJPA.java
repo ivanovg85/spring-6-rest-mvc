@@ -1,7 +1,6 @@
 package art.cookedincode.spring6restmvc.service;
 
 import art.cookedincode.spring6restmvc.mappers.CustomerMapper;
-import art.cookedincode.spring6restmvc.model.BeerDTO;
 import art.cookedincode.spring6restmvc.model.CustomerDTO;
 import art.cookedincode.spring6restmvc.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -56,9 +55,7 @@ public class CustomerServiceJPA implements CustomerService {
             atomicReference.set(Optional.of(
                     customerMapper.customerToCustomerDto(customerRepository.save(foundCustomer))
             ));
-        }, () -> {
-            atomicReference.set(Optional.empty());
-        });
+        }, () -> atomicReference.set(Optional.empty()));
 
         return atomicReference.get();
     }
@@ -82,9 +79,7 @@ public class CustomerServiceJPA implements CustomerService {
             atomicReference.set(Optional.of(
                     customerMapper.customerToCustomerDto(customerRepository.save(foundCustomer))
             ));
-        }, () -> {
-            atomicReference.set(Optional.empty());
-        });
+        }, () -> atomicReference.set(Optional.empty()));
 
         return atomicReference.get();
     }
