@@ -2,6 +2,7 @@ package art.cookedincode.spring6restmvc.services;
 
 import art.cookedincode.spring6restmvc.model.Customer;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -77,12 +78,18 @@ public class CustomerServiceImpl implements CustomerService {
         existing.setName(customer.getName());
         existing.setVersion(existing.getVersion() + 1);
         existing.setLastModifiedDate(LocalDateTime.now());
-
-        customerMap.put(existing.getId(), existing);
     }
 
     @Override
     public void deleteCustomerById(UUID customerId) {
         customerMap.remove(customerId);
+    }
+
+    @Override
+    public void patchCustomerById(UUID customerId, Customer customer) {
+        Customer existing = customerMap.get(customerId);
+        existing.setName(StringUtils.hasText(customer.getName()) ? customer.getName() : existing.getName());
+        existing.setVersion(existing.getVersion() + 1);
+        existing.setLastModifiedDate(LocalDateTime.now());
     }
 }
