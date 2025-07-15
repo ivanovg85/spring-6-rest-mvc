@@ -4,6 +4,7 @@ import art.cookedincode.spring6restmvc.model.Beer;
 import art.cookedincode.spring6restmvc.model.BeerStyle;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -104,12 +105,22 @@ public class BeerServiceImpl implements BeerService {
         existing.setPrice(beer.getPrice());
         existing.setUpc(beer.getUpc());
         existing.setQuantityOnHand(beer.getQuantityOnHand());
-
-        beerMap.put(existing.getId(), existing);
     }
 
     @Override
     public void deleteBeerById(UUID beerId) {
         beerMap.remove(beerId);
+    }
+
+    @Override
+    public void patchBeerById(UUID beerId, Beer beer) {
+        Beer existing = beerMap.get(beerId);
+        existing.setVersion(existing.getVersion() + 1);
+        existing.setUpdateDate(LocalDateTime.now());
+        existing.setBeerName(StringUtils.hasText(beer.getBeerName()) ? beer.getBeerName() : existing.getBeerName());
+        existing.setBeerStyle(beer.getBeerStyle() != null ? beer.getBeerStyle() : existing.getBeerStyle());
+        existing.setPrice(beer.getPrice() != null ? beer.getPrice() : existing.getPrice());
+        existing.setUpc(StringUtils.hasText(beer.getUpc()) ? beer.getUpc() : existing.getUpc());
+        existing.setQuantityOnHand(beer.getQuantityOnHand() != null ? beer.getQuantityOnHand() : existing.getQuantityOnHand());
     }
 }
