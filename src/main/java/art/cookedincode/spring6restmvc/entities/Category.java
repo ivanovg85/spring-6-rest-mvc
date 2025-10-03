@@ -18,11 +18,11 @@ import java.util.UUID;
  */
 @Getter
 @Setter
-@Builder
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
-public class Customer {
+@AllArgsConstructor
+@Builder
+public class Category {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -30,10 +30,6 @@ public class Customer {
     @JdbcTypeCode(SqlTypes.CHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
-    private String name;
-
-    @Column(length = 255)
-    private String email;
 
     @Version
     private Integer version;
@@ -45,7 +41,12 @@ public class Customer {
     @UpdateTimestamp
     private LocalDateTime lastModifiedDate;
 
+    private String description;
+
     @Builder.Default
-    @OneToMany(mappedBy = "customer")
-    private Set<BeerOrder> beerOrders = new HashSet<>();
+    @ManyToMany
+    @JoinTable(name = "beer_category",
+            joinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "beer_id", referencedColumnName = "id"))
+    private Set<Beer> beers = new HashSet<>();
 }
