@@ -52,7 +52,8 @@ public class BeerServiceJPA implements BeerService {
 
         log.info("List Beers - in service");
 
-        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
+        Sort sort = Sort.by(Sort.Order.asc("beerName"));
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sort);
 
         Page<Beer> beerPage;
 
@@ -73,7 +74,7 @@ public class BeerServiceJPA implements BeerService {
         return beerPage.map(beerMapper::beerToBeerDto);
     }
 
-    public PageRequest buildPageRequest(Integer pageNumber, Integer pageSize) {
+    public static PageRequest buildPageRequest(Integer pageNumber, Integer pageSize, Sort sort) {
         int queryPageNumber;
         int queryPageSize;
 
@@ -91,8 +92,6 @@ public class BeerServiceJPA implements BeerService {
                 queryPageSize = pageSize;
             }
         }
-
-        Sort sort = Sort.by(Sort.Order.asc("beerName"));
 
         return PageRequest.of(queryPageNumber, queryPageSize, sort);
     }

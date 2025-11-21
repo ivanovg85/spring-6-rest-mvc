@@ -1,5 +1,6 @@
 package art.cookedincode.spring6restmvc.bootstrap;
 
+import art.cookedincode.spring6restmvc.repositories.BeerOrderRepository;
 import art.cookedincode.spring6restmvc.repositories.BeerRepository;
 import art.cookedincode.spring6restmvc.repositories.CustomerRepository;
 import art.cookedincode.spring6restmvc.services.BeerCsvService;
@@ -26,13 +27,16 @@ class BootstrapDataTest {
     CustomerRepository customerRepository;
 
     @Autowired
+    BeerOrderRepository beerOrderRepository;
+
+    @Autowired
     BeerCsvService beerCsvService;
 
     BootstrapData bootstrapData;
 
     @BeforeEach
     void setUp() {
-        bootstrapData = new BootstrapData(beerRepository, customerRepository, beerCsvService);
+        bootstrapData = new BootstrapData(beerRepository, customerRepository, beerOrderRepository, beerCsvService);
     }
 
     @Test
