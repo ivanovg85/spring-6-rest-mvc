@@ -1,6 +1,7 @@
 package art.cookedincode.spring6restmvc.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -39,6 +40,7 @@ public class BeerOrderShipment {
     @UpdateTimestamp
     private LocalDateTime lastModifiedDate;
 
+    @NotBlank
     private String trackingNumber;
 
     @OneToOne
