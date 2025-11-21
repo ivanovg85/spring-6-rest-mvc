@@ -1,12 +1,16 @@
 package art.cookedincode.spring6restmvc.bootstrap;
 
 import art.cookedincode.spring6restmvc.entities.Beer;
+import art.cookedincode.spring6restmvc.entities.BeerOrder;
+import art.cookedincode.spring6restmvc.entities.BeerOrderLine;
 import art.cookedincode.spring6restmvc.entities.Customer;
 import art.cookedincode.spring6restmvc.model.BeerStyle;
+import art.cookedincode.spring6restmvc.repositories.BeerOrderRepository;
 import art.cookedincode.spring6restmvc.repositories.BeerRepository;
 import art.cookedincode.spring6restmvc.repositories.CustomerRepository;
 import art.cookedincode.spring6restmvc.services.BeerCsvService;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -18,6 +22,8 @@ import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Georgi Ivanov
@@ -27,6 +33,7 @@ import java.util.Arrays;
 public class BootstrapData implements CommandLineRunner {
     private final BeerRepository beerRepository;
     private final CustomerRepository customerRepository;
+    private final BeerOrderRepository beerOrderRepository;
     private final BeerCsvService beerCsvService;
 
     @Transactional
@@ -35,6 +42,7 @@ public class BootstrapData implements CommandLineRunner {
         loadBeerData();
         loadCsvData();
         loadCustomerData();
+        loadOrderData();
     }
 
     private void loadBeerData() {
@@ -124,6 +132,43 @@ public class BootstrapData implements CommandLineRunner {
 
             customerRepository.saveAll(Arrays.asList(customer1, customer2, customer3));
         }
+    }
 
+    private void loadOrderData() {
+        if (beerOrderRepository.count() == 0) {
+            val customers =  customerRepository.findAll();
+            val beers = beerRepository.findAll();
+            val beerIterator = beers.iterator();
+
+            customers.forEach(customer -> {
+                beerOrderRepository.save(BeerOrder.builder()
+                        .customer(customer)
+                        .beerOrderLines(Set.of(
+                                BeerOrderLine.builder()
+                                        .beer(beerIterator.next())
+                                        .orderQuantity(1)
+                                        .build(),
+                                BeerOrderLine.builder()
+                                        .beer(beerIterator.next())
+                                        .orderQuantity(2)
+                                        .build()
+                        ))
+                        .build());
+
+                beerOrderRepository.save(BeerOrder.builder()
+                        .customer(customer)
+                        .beerOrderLines(Set.of(
+                                BeerOrderLine.builder()
+                                        .beer(beerIterator.next())
+                                        .orderQuantity(1)
+                                        .build(),
+                                BeerOrderLine.builder()
+                                        .beer(beerIterator.next())
+                                        .orderQuantity(2)
+                                        .build()
+                        ))
+                        .build());
+            });
+        }
     }
 }
