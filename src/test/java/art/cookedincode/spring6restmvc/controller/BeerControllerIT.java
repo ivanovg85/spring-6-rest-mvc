@@ -6,6 +6,7 @@ import art.cookedincode.spring6restmvc.events.BeerCreatedEvent;
 import art.cookedincode.spring6restmvc.mappers.BeerMapper;
 import art.cookedincode.spring6restmvc.model.BeerDTO;
 import art.cookedincode.spring6restmvc.model.BeerStyle;
+import art.cookedincode.spring6restmvc.repositories.BeerOrderRepository;
 import art.cookedincode.spring6restmvc.repositories.BeerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.val;
@@ -68,6 +69,8 @@ class BeerControllerIT {
     ObjectMapper objectMapper;
 
     MockMvc mockMvc;
+    @Autowired
+    private BeerOrderRepository beerOrderRepository;
 
     @BeforeEach
     void setUp() {
@@ -306,6 +309,7 @@ class BeerControllerIT {
     @Transactional
     @Test
     void testEmptyList() {
+        beerOrderRepository.deleteAll();
         beerRepository.deleteAll();
         Page<BeerDTO> dtos = beerController.listBeers(null, null, null, 1, 25);
 

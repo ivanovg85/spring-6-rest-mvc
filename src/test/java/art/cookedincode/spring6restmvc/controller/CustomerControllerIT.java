@@ -3,6 +3,7 @@ package art.cookedincode.spring6restmvc.controller;
 import art.cookedincode.spring6restmvc.entities.Customer;
 import art.cookedincode.spring6restmvc.mappers.CustomerMapper;
 import art.cookedincode.spring6restmvc.model.CustomerDTO;
+import art.cookedincode.spring6restmvc.repositories.BeerOrderRepository;
 import art.cookedincode.spring6restmvc.repositories.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,8 @@ class CustomerControllerIT {
 
     @Autowired
     CustomerMapper customerMapper;
+    @Autowired
+    private BeerOrderRepository beerOrderRepository;
 
     @Test
     void testPatchCustomerByIdNotFound() {
@@ -141,6 +144,7 @@ class CustomerControllerIT {
     @Transactional
     @Test
     void testEmptyList() {
+        beerOrderRepository.deleteAll();
         customerRepository.deleteAll();
         List<CustomerDTO> dtos = customerController.listCustomers();
 

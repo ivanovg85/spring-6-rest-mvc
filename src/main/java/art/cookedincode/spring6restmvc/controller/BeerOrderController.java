@@ -1,14 +1,15 @@
 package art.cookedincode.spring6restmvc.controller;
 
+import art.cookedincode.spring6restmvc.model.BeerOrderCreateDTO;
 import art.cookedincode.spring6restmvc.model.BeerOrderDTO;
+import art.cookedincode.spring6restmvc.model.BeerOrderUpdateDTO;
 import art.cookedincode.spring6restmvc.services.BeerOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.UUID;
 
 /**
@@ -32,5 +33,24 @@ public class BeerOrderController {
     public Page<BeerOrderDTO> listBeerOrders(@RequestParam(required = false) Integer pageNumber,
                                              @RequestParam(required = false) Integer pageSize) {
         return beerOrderService.listBeerOrders(pageNumber, pageSize);
+    }
+
+    @PostMapping(BEER_ORDER_PATH)
+    public ResponseEntity<Void> createBeerOrder(@RequestBody BeerOrderCreateDTO beerOrderCreateDTO) {
+        BeerOrderDTO beerOrder = beerOrderService.createBeerOrder(beerOrderCreateDTO);
+
+        return ResponseEntity.created(URI.create(BEER_ORDER_PATH + "/" + beerOrder.getId().toString())).build();
+    }
+
+    @PutMapping(BEER_ORDER_PATH_ID)
+    public ResponseEntity<BeerOrderDTO> updateBeerOrder(@PathVariable UUID beerOrderId,
+                                                @RequestBody BeerOrderUpdateDTO beerOrderUpdateDTO) {
+        return ResponseEntity.ok(beerOrderService.updateBeerOrder(beerOrderId, beerOrderUpdateDTO));
+    }
+
+    @DeleteMapping(BEER_ORDER_PATH_ID)
+    public ResponseEntity<Void> deleteBeerOrder(@PathVariable UUID beerOrderId) {
+        beerOrderService.deleteBeerOrder(beerOrderId);
+        return ResponseEntity.noContent().build();
     }
 }

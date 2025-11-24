@@ -1,23 +1,33 @@
 package art.cookedincode.spring6restmvc.controller;
 
+import art.cookedincode.spring6restmvc.model.*;
 import art.cookedincode.spring6restmvc.repositories.BeerOrderRepository;
+import art.cookedincode.spring6restmvc.repositories.BeerRepository;
+import art.cookedincode.spring6restmvc.repositories.CustomerRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static art.cookedincode.spring6restmvc.controller.BeerControllerTest.jwtRequestPostProcessor;
 import static art.cookedincode.spring6restmvc.controller.BeerOrderController.BEER_ORDER_PATH;
 import static art.cookedincode.spring6restmvc.controller.BeerOrderController.BEER_ORDER_PATH_ID;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -32,6 +42,15 @@ class BeerOrderControllerTestIT {
     MockMvc mockMvc;
     @Autowired
     private BeerOrderRepository beerOrderRepository;
+
+    @Autowired
+    CustomerRepository customerRepository;
+
+    @Autowired
+    BeerRepository beerRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
@@ -60,5 +79,75 @@ class BeerOrderControllerTestIT {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(beerOrder.getId().toString())));
+    }
+
+    @Test
+    void createBeerOrder() throws Exception {
+        val customer = customerRepository.findAll().getFirst();
+        val beer = beerRepository.findAll().getFirst();
+
+        val beerOrderCreateDTO = BeerOrderCreateDTO.builder()
+                .customerId(customer.getId())
+                .beerOrderLines(Set.of(BeerOrderLineCreateDTO.builder()
+                        .beerId(beer.getId())
+                        .orderQuantity(1)
+                        .build()))
+                .build();
+
+        mockMvc.perform(post(BEER_ORDER_PATH)
+                        .with(jwtRequestPostProcessor)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerOrderCreateDTO)))
+                .andExpect(status().isCreated())
+                .andExpect(header().exists("Location"));
+    }
+
+    @Transactional
+    @Test
+    void updateBeerOrder() throws Exception {
+        val beerOrder = beerOrderRepository.findAll().getFirst();
+        Set<BeerOrderLineUpdateDTO> beerOrderLines = new HashSet<>();
+        beerOrder.getBeerOrderLines().forEach(beerOrderLine -> {
+            beerOrderLines.add(BeerOrderLineUpdateDTO.builder()
+                    .id(beerOrderLine.getId())
+                    .beerId(beerOrderLine.getBeer().getId())
+                    .orderQuantity(beerOrderLine.getOrderQuantity())
+                    .quantityAllocated(beerOrderLine.getQuantityAllocated())
+                    .build());
+        });
+
+        val beerOrderUpdateDTO = BeerOrderUpdateDTO.builder()
+                .customerId(beerOrder.getCustomer().getId())
+                .customerRef("TestRef")
+                .beerOrderLines(beerOrderLines)
+                .beerOrderShipment(BeerOrderShipmentUpdateDTO.builder()
+                        .trackingNumber("123456")
+                        .build())
+                .build();
+
+        mockMvc.perform(put(BEER_ORDER_PATH_ID, beerOrder.getId())
+                        .with(jwtRequestPostProcessor)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerOrderUpdateDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.customerRef", is("TestRef")));
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    void deleteBeerOrder() throws Exception {
+        val beerOrder = beerOrderRepository.findAll().getFirst();
+
+        mockMvc.perform(delete(BEER_ORDER_PATH_ID, beerOrder.getId())
+                        .with(jwtRequestPostProcessor))
+                .andExpect(status().isNoContent());
+
+        assertTrue(beerOrderRepository.findById(beerOrder.getId()).isEmpty());
+
+        mockMvc.perform(delete(BEER_ORDER_PATH_ID, beerOrder.getId())
+                        .with(jwtRequestPostProcessor))
+                .andExpect(status().isNotFound());
     }
 }
