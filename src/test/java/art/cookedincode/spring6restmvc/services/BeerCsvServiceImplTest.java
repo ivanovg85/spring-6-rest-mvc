@@ -2,10 +2,9 @@ package art.cookedincode.spring6restmvc.services;
 
 import art.cookedincode.spring6restmvc.model.BeerCSVRecord;
 import org.junit.jupiter.api.Test;
-import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -18,10 +17,10 @@ class BeerCsvServiceImplTest {
     BeerCsvService beerCsvService = new BeerCsvServiceImpl();
 
     @Test
-    void convertCSV() throws FileNotFoundException {
-        File file = ResourceUtils.getFile("classpath:csvdata/beers.csv");
+    void convertCSV() throws IOException {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("csvdata/beers.csv");
 
-        List<BeerCSVRecord> records = beerCsvService.convertCSV(file);
+        List<BeerCSVRecord> records = beerCsvService.convertCSV(inputStream);
 
         System.out.println(records.size());
 

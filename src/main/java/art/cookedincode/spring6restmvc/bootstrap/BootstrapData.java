@@ -13,12 +13,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -35,6 +35,7 @@ public class BootstrapData implements CommandLineRunner {
     private final CustomerRepository customerRepository;
     private final BeerOrderRepository beerOrderRepository;
     private final BeerCsvService beerCsvService;
+    private final ResourceLoader resourceLoader;
 
     @Transactional
     @Override
@@ -81,11 +82,11 @@ public class BootstrapData implements CommandLineRunner {
         }
     }
 
-    private void loadCsvData() throws FileNotFoundException {
+    private void loadCsvData() throws IOException {
         if (beerRepository.count() < 10) {
             System.out.println("Loading CSV Data");
-            File file = ResourceUtils.getFile("classpath:csvdata/beers.csv");
-            beerCsvService.convertCSV(file).forEach(beerCSVRecord -> {
+            Resource resource = resourceLoader.getResource("classpath:csvdata/beers.csv");
+            beerCsvService.convertCSV(resource.getInputStream()).forEach(beerCSVRecord -> {
                 BeerStyle beerStyle = switch (beerCSVRecord.getStyle()) {
                     case "American Pale Lager" -> BeerStyle.LAGER;
                     case "American Pale Ale (APA)", "American Black Ale", "Belgian Dark Ale", "American Blonde Ale" ->
