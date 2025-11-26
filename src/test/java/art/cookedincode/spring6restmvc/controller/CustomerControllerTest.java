@@ -1,9 +1,9 @@
 package art.cookedincode.spring6restmvc.controller;
 
 import art.cookedincode.spring6restmvc.config.SpringSecurityConfig;
-import art.cookedincode.spring6restmvc.model.CustomerDTO;
 import art.cookedincode.spring6restmvc.services.CustomerService;
 import art.cookedincode.spring6restmvc.services.CustomerServiceImpl;
+import art.cookedincode.spring6restmvcapi.model.CustomerDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

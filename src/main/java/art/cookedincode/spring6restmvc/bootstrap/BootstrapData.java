@@ -4,11 +4,11 @@ import art.cookedincode.spring6restmvc.entities.Beer;
 import art.cookedincode.spring6restmvc.entities.BeerOrder;
 import art.cookedincode.spring6restmvc.entities.BeerOrderLine;
 import art.cookedincode.spring6restmvc.entities.Customer;
-import art.cookedincode.spring6restmvc.model.BeerStyle;
 import art.cookedincode.spring6restmvc.repositories.BeerOrderRepository;
 import art.cookedincode.spring6restmvc.repositories.BeerRepository;
 import art.cookedincode.spring6restmvc.repositories.CustomerRepository;
 import art.cookedincode.spring6restmvc.services.BeerCsvService;
+import art.cookedincode.spring6restmvcapi.model.BeerStyle;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 
 /**

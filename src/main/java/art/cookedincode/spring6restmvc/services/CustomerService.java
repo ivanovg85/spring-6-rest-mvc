@@ -1,6 +1,6 @@
 package art.cookedincode.spring6restmvc.services;
 
-import art.cookedincode.spring6restmvc.model.CustomerDTO;
+import art.cookedincode.spring6restmvcapi.model.CustomerDTO;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package art.cookedincode.spring6restmvc.entities;
 
-import art.cookedincode.spring6restmvc.model.BeerStyle;
+import art.cookedincode.spring6restmvcapi.model.BeerStyle;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,9 +1,8 @@
 package art.cookedincode.spring6restmvc.entities;
 
-import art.cookedincode.spring6restmvc.model.BeerOrderLineStatus;
+import art.cookedincode.spring6restmvcapi.model.BeerOrderLineStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;

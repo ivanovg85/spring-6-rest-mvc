@@ -3,9 +3,9 @@ package art.cookedincode.spring6restmvc.mappers;
 import art.cookedincode.spring6restmvc.entities.BeerOrder;
 import art.cookedincode.spring6restmvc.entities.BeerOrderLine;
 import art.cookedincode.spring6restmvc.entities.BeerOrderShipment;
-import art.cookedincode.spring6restmvc.model.BeerOrderDTO;
-import art.cookedincode.spring6restmvc.model.BeerOrderLineDTO;
-import art.cookedincode.spring6restmvc.model.BeerOrderShipmentDTO;
+import art.cookedincode.spring6restmvcapi.model.BeerOrderDTO;
+import art.cookedincode.spring6restmvcapi.model.BeerOrderLineDTO;
+import art.cookedincode.spring6restmvcapi.model.BeerOrderShipmentDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

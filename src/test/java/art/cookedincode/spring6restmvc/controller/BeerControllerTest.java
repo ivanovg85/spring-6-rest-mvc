@@ -1,9 +1,9 @@
 package art.cookedincode.spring6restmvc.controller;
 
 import art.cookedincode.spring6restmvc.config.SpringSecurityConfig;
-import art.cookedincode.spring6restmvc.model.BeerDTO;
 import art.cookedincode.spring6restmvc.services.BeerService;
 import art.cookedincode.spring6restmvc.services.BeerServiceImpl;
+import art.cookedincode.spring6restmvcapi.model.BeerDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

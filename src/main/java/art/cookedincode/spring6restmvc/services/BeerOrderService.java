@@ -1,8 +1,8 @@
 package art.cookedincode.spring6restmvc.services;
 
-import art.cookedincode.spring6restmvc.model.BeerOrderCreateDTO;
-import art.cookedincode.spring6restmvc.model.BeerOrderDTO;
-import art.cookedincode.spring6restmvc.model.BeerOrderUpdateDTO;
+import art.cookedincode.spring6restmvcapi.model.BeerOrderCreateDTO;
+import art.cookedincode.spring6restmvcapi.model.BeerOrderDTO;
+import art.cookedincode.spring6restmvcapi.model.BeerOrderUpdateDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.Optional;

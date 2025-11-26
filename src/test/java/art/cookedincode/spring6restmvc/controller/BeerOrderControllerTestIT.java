@@ -1,9 +1,9 @@
 package art.cookedincode.spring6restmvc.controller;
 
-import art.cookedincode.spring6restmvc.model.*;
 import art.cookedincode.spring6restmvc.repositories.BeerOrderRepository;
 import art.cookedincode.spring6restmvc.repositories.BeerRepository;
 import art.cookedincode.spring6restmvc.repositories.CustomerRepository;
+import art.cookedincode.spring6restmvcapi.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.val;
 import org.junit.jupiter.api.BeforeEach;

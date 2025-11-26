@@ -1,7 +1,7 @@
 package art.cookedincode.spring6restmvc.controller;
 
-import art.cookedincode.spring6restmvc.model.CustomerDTO;
 import art.cookedincode.spring6restmvc.services.CustomerService;
+import art.cookedincode.spring6restmvcapi.model.CustomerDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

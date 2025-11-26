@@ -1,6 +1,6 @@
 package art.cookedincode.spring6restmvc.services;
 
-import art.cookedincode.spring6restmvc.model.CustomerDTO;
+import art.cookedincode.spring6restmvcapi.model.CustomerDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 

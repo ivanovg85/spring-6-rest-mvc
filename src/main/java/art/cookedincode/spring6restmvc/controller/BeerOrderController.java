@@ -1,9 +1,9 @@
 package art.cookedincode.spring6restmvc.controller;
 
-import art.cookedincode.spring6restmvc.model.BeerOrderCreateDTO;
-import art.cookedincode.spring6restmvc.model.BeerOrderDTO;
-import art.cookedincode.spring6restmvc.model.BeerOrderUpdateDTO;
 import art.cookedincode.spring6restmvc.services.BeerOrderService;
+import art.cookedincode.spring6restmvcapi.model.BeerOrderCreateDTO;
+import art.cookedincode.spring6restmvcapi.model.BeerOrderDTO;
+import art.cookedincode.spring6restmvcapi.model.BeerOrderUpdateDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;

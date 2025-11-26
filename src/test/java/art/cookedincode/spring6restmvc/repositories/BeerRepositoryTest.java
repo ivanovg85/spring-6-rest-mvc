@@ -2,8 +2,8 @@ package art.cookedincode.spring6restmvc.repositories;
 
 import art.cookedincode.spring6restmvc.bootstrap.BootstrapData;
 import art.cookedincode.spring6restmvc.entities.Beer;
-import art.cookedincode.spring6restmvc.model.BeerStyle;
 import art.cookedincode.spring6restmvc.services.BeerCsvServiceImpl;
+import art.cookedincode.spring6restmvcapi.model.BeerStyle;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

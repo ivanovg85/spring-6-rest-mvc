@@ -1,8 +1,8 @@
 package art.cookedincode.spring6restmvc.controller;
 
-import art.cookedincode.spring6restmvc.model.BeerDTO;
-import art.cookedincode.spring6restmvc.model.BeerStyle;
 import art.cookedincode.spring6restmvc.services.BeerService;
+import art.cookedincode.spring6restmvcapi.model.BeerDTO;
+import art.cookedincode.spring6restmvcapi.model.BeerStyle;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
