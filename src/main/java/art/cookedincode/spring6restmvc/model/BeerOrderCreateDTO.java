@@ -23,10 +23,4 @@ public class BeerOrderCreateDTO {
     private UUID customerId;
 
     private Set<BeerOrderLineCreateDTO> beerOrderLines;
-
-    @NotBlank
-    private String paymentInformation;
-
-    @Positive
-    private BigDecimal paymentAmount;
 }
