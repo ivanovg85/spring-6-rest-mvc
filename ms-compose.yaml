@@ -1,3 +1,4 @@
+name: spring-6-microservices
 services:
   mysql:
     container_name: mysql
@@ -13,21 +14,6 @@ services:
       - spring-network
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-ppassword"]
-      timeout: 20s
-      retries: 10
-
-  mongo:
-    container_name: mongo
-    image: mongo:latest
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-    expose:
-      - "27017"
-    networks:
-      - spring-network
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       timeout: 20s
       retries: 10
 
@@ -55,32 +41,6 @@ services:
     networks:
       - spring-network
 
-  reactive:
-    container_name: reactive
-    image: spring-6-reactive:0.0.1-SNAPSHOT
-    environment:
-      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://auth-server:9000 \
-      SERVER_PORT: 8080
-    expose:
-      - "8080"
-    networks:
-      - spring-network
-
-  reactive-mongo:
-    container_name: reactive-mongo
-    image: spring-6-reactive-mongo:0.0.1-SNAPSHOT
-    environment:
-      SPRING_DATA_MONGODB_HOST: mongo
-      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://auth-server:9000
-      SERVER_PORT: 8080
-    expose:
-      - "8080"
-    depends_on:
-      mongo:
-        condition: service_healthy
-    networks:
-      - spring-network
-
   gateway:
     container_name: gateway
     image: spring-6-gateway:0.0.1-SNAPSHOT
@@ -92,8 +52,6 @@ services:
     depends_on:
       - auth-server
       - rest-mvc
-      - reactive
-      - reactive-mongo
     networks:
       - spring-network
 
