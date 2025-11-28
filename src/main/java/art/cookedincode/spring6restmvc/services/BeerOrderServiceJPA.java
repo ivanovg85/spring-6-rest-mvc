@@ -9,11 +9,13 @@ import art.cookedincode.spring6restmvc.mappers.BeerOrderMapper;
 import art.cookedincode.spring6restmvc.repositories.BeerOrderRepository;
 import art.cookedincode.spring6restmvc.repositories.BeerRepository;
 import art.cookedincode.spring6restmvc.repositories.CustomerRepository;
+import art.cookedincode.spring6restmvcapi.events.OrderPlacedEvent;
 import art.cookedincode.spring6restmvcapi.model.BeerOrderCreateDTO;
 import art.cookedincode.spring6restmvcapi.model.BeerOrderDTO;
 import art.cookedincode.spring6restmvcapi.model.BeerOrderUpdateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,7 @@ public class BeerOrderServiceJPA implements BeerOrderService {
     private final BeerOrderMapper beerOrderMapper;
     private final CustomerRepository customerRepository;
     private final BeerRepository beerRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public Optional<BeerOrderDTO> getById(UUID id) {
@@ -105,7 +108,15 @@ public class BeerOrderServiceJPA implements BeerOrderService {
             }
         }
 
-        return beerOrderMapper.beerOrderToBeerOrderDto(beerOrderRepository.save(beerOrder));
+        BeerOrderDTO dto = beerOrderMapper.beerOrderToBeerOrderDto(beerOrderRepository.save(beerOrder));
+
+        if (beerOrderUpdateDTO.getPaymentAmount() != null) {
+            applicationEventPublisher.publishEvent(OrderPlacedEvent.builder()
+                            .beerOrderDTO(dto)
+                    .build());
+        }
+
+        return dto;
     }
 
     @Override
